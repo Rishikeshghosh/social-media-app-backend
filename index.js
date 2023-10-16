@@ -43,10 +43,6 @@ app.use(express.static(path.resolve(__dirname, "build")));
 app.use("/auth", authRouter);
 app.use("/auth/users", userRouter);
 app.use("/auth/posts", postsRouter);
-app.post("/post", (req, res) => {
-  const { email } = req.body;
-  res.status(200).json(email);
-});
 app.post("/auth/register", register);
 app.post("/auth/mainposts", varifyToken, createPost);
 app.patch("/auth/change/profic/pic", varifyToken, changeProfiePic);

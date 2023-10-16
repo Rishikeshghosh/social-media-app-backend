@@ -1,6 +1,20 @@
 import Post from "../Models/posts.js";
 import User from "../Models/user.js";
 
+export const getAllUsers = async (req, res) => {
+  try {
+    const { keyword } = req.params;
+    console.log(keyword);
+
+    const users = await User.find({
+      firstName: { $regex: `^${keyword}`, $options: "i" },
+    });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const getUsers = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -42,7 +56,6 @@ export const addRemoveFriends = async (req, res) => {
     const { friendId } = req.params;
     const { id } = req.user;
     let user = await User.findById(id);
-    console.log(user);
 
     if (user.friends.includes(friendId)) {
       let currentUser = await User.findOneAndUpdate(
@@ -120,7 +133,7 @@ export const changeProfiePic = async (req, res) => {
       { $set: { userPicturePath: picturePath } }
     );
 
-   /*  let allUserComments = await Post.find({ userId: id });
+    /*  let allUserComments = await Post.find({ userId: id });
 
     const updateComments = async (allUserComments) => {
       for (let value of allUserComments) {
